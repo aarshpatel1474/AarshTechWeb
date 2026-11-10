@@ -1995,7 +1995,7 @@ textarea.form-control {
   background: rgba(168, 85, 247, 0.25);
   border-color: var(--color-x-purple);
   color: #fff;
-  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.3);
+  box-shadow: none;
 }
 
 /* Featured Apps Dual Grid */
@@ -2154,22 +2154,22 @@ textarea.form-control {
   font-size: 0.95rem;
   text-decoration: none;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
+  box-shadow: none;
 }
 
 .playstore-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+  box-shadow: none;
   color: #fff;
 }
 
 .playstore-btn-purple {
   background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
-  box-shadow: 0 4px 18px rgba(147, 51, 234, 0.35);
+  box-shadow: none;
 }
 
 .playstore-btn-purple:hover {
-  box-shadow: 0 8px 25px rgba(147, 51, 234, 0.5);
+  box-shadow: none;
 }
 
 .app-details-btn {
@@ -2336,12 +2336,12 @@ textarea.form-control {
   font-weight: 800;
   text-decoration: none;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 18px rgba(234, 67, 53, 0.35);
+  box-shadow: none;
 }
 
 .gmail-compose-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(234, 67, 53, 0.5);
+  box-shadow: none;
   color: #fff;
 }
 
@@ -2358,12 +2358,12 @@ textarea.form-control {
   font-weight: 800;
   text-decoration: none;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 18px rgba(147, 51, 234, 0.35);
+  box-shadow: none;
 }
 
 .mailto-compose-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(147, 51, 234, 0.5);
+  box-shadow: none;
   color: #fff;
 }
 
@@ -2395,4 +2395,41 @@ textarea.form-control {
   border-color: var(--color-x-purple);
   transform: translateX(4px);
   color: #fff;
+}
+
+
+/* ==========================================================
+   GLOBAL BUTTON SHADOW REMOVAL (Clean Modern Flat Look)
+   ========================================================== */
+
+button,
+.btn-primary,
+.btn-secondary,
+.playstore-btn,
+.app-details-btn,
+.gmail-compose-btn,
+.mailto-compose-btn,
+.copy-email-btn,
+.filter-tab-btn,
+.quick-topic-btn,
+.pill-btn,
+.nav-store-btn {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+button:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.playstore-btn:hover,
+.app-details-btn:hover,
+.gmail-compose-btn:hover,
+.mailto-compose-btn:hover,
+.copy-email-btn:hover,
+.filter-tab-btn:hover,
+.quick-topic-btn:hover,
+.pill-btn:hover,
+.nav-store-btn:hover {
+  box-shadow: none !important;
+  text-shadow: none !important;
 }

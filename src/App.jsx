@@ -37,6 +37,7 @@ export default function App() {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   // URLs
+  const DEVELOPER_PROFILE_URL = "https://play.google.com/store/apps/developer?id=Aarsh+Tech&hl=en_IN";
   const TICTACTOE_PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.aarsh.tictactoe&hl=en_IN";
   const DUPLICATE_PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.aarsh.duplicatephotofinder&hl=en_IN";
 
@@ -131,7 +132,7 @@ export default function App() {
 
           <div className="nav-cta">
             <a 
-              href={TICTACTOE_PLAY_STORE_URL} 
+              href={DEVELOPER_PROFILE_URL} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="btn-primary nav-store-btn"
@@ -172,7 +173,7 @@ export default function App() {
             <span>Explore Published Apps</span>
           </a>
           <a 
-            href={TICTACTOE_PLAY_STORE_URL} 
+            href={DEVELOPER_PROFILE_URL} 
             target="_blank" 
             rel="noopener noreferrer"
             className="btn-secondary" 
@@ -563,7 +564,7 @@ export default function App() {
                 <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Developer: <strong style={{ color: '#fff' }}>Aarsh</strong></li>
                 <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Company: <strong style={{ color: '#fff' }}>Aarsh Tech Web</strong></li>
                 <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Email: <a href="mailto:aarsh.official.dev@gmail.com" style={{ color: 'var(--color-x-purple)' }}>aarsh.official.dev@gmail.com</a></li>
-                <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Google Play: <span style={{ color: '#38bdf8' }}>Verified Publisher</span></li>
+                <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Google Play: <a href={DEVELOPER_PROFILE_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#38bdf8', textDecoration: 'underline' }}>Aarsh Tech Profile ↗</a></li>
               </ul>
             </div>
           </div>
