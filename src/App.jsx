@@ -30,8 +30,6 @@ export default function App() {
   // Navigation & Modals
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedAppModal, setSelectedAppModal] = useState(null); // 'tictactoe' | 'cleansnap' | null
-  const [privacyTab, setPrivacyTab] = useState('tictactoe'); // 'tictactoe' | 'cleansnap' | 'general'
-  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState(0);
   const [filterCategory, setFilterCategory] = useState('all'); // 'all' | 'games' | 'tools'
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -41,13 +39,17 @@ export default function App() {
   const TICTACTOE_PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.aarsh.tictactoe&hl=en_IN";
   const DUPLICATE_PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.aarsh.duplicatephotofinder&hl=en_IN";
 
+  // Official Privacy Policy URLs (Direct External Links)
+  const TICTACTOE_PRIVACY_URL = "https://sites.google.com/view/tictactoeglow2playerxo/home";
+  const DUPLICATE_PRIVACY_URL = "https://sites.google.com/view/duplicate-photo-finder-policy/home";
+
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('aarsh.official.dev@gmail.com');
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 
-  // Published Apps Catalog
+  // Published Apps Catalog (easily extensible for future apps)
   const apps = [
     {
       id: 'tictactoe',
@@ -59,6 +61,7 @@ export default function App() {
       badge: 'Version 2.0 • Featured Game',
       badgeColor: 'badge-purple',
       playStoreUrl: TICTACTOE_PLAY_STORE_URL,
+      privacyPolicyUrl: TICTACTOE_PRIVACY_URL,
       shortDesc: 'Futuristic neon cyberpunk Tic Tac Toe on Android featuring the all-new Infinity Vanishing Mode, 3x3 to 6x6 expanded board sizes, 20 ranked tiers, and local 2-player battles.',
       highlights: [
         { icon: <Zap size={18} style={{ color: 'var(--color-x-purple)' }} />, title: 'All-New Infinity Mode', desc: 'Max 3 marks per player. 4th move vanishes oldest mark; matches never end in draws!' },
@@ -71,7 +74,7 @@ export default function App() {
         platform: 'Android 7.0 and up',
         price: '100% Free',
         category: 'Strategy / Board Game',
-        developer: 'Aarsh (Aarsh Tech Web)',
+        developer: 'Aarsh Tech',
         updated: 'November 2026'
       }
     },
@@ -85,6 +88,7 @@ export default function App() {
       badge: 'Storage Saver • Top Utility',
       badgeColor: 'badge-blue',
       playStoreUrl: DUPLICATE_PLAY_STORE_URL,
+      privacyPolicyUrl: DUPLICATE_PRIVACY_URL,
       shortDesc: 'Intelligent on-device gallery organizer that identifies duplicate copies, blurry shots, and old screenshots using perceptual dHash algorithms to reclaim gigabytes safely.',
       highlights: [
         { icon: <Image size={18} style={{ color: '#38bdf8' }} />, title: 'Exact & Similar Photo Detection', desc: 'MD5 byte verification & dHash perceptual algorithms accurately group duplicate pictures.' },
@@ -97,7 +101,7 @@ export default function App() {
         platform: 'Android 8.0 and up',
         price: '100% Free',
         category: 'Tools / Storage & Productivity',
-        developer: 'Aarsh (Aarsh Tech Web)',
+        developer: 'Aarsh Tech',
         updated: 'October 2026'
       }
     }
@@ -115,9 +119,9 @@ export default function App() {
       <nav className="navbar">
         <div className="container nav-container">
           <a href="#home" className="nav-brand">
-            <img src="/studio_logo.svg" alt="Aarsh Tech Web Studio Logo" className="brand-icon" />
+            <img src="/studio_logo.svg" alt="Aarsh Tech Studio Logo" className="brand-icon" />
             <span className="brand-title">
-              Aarsh Tech Web
+              Aarsh Tech
               <small className="brand-sub">Android Apps & Games Studio</small>
             </span>
           </a>
@@ -126,7 +130,7 @@ export default function App() {
             <li><a href="#home" onClick={() => setIsMobileMenuOpen(false)}>Home</a></li>
             <li><a href="#apps" onClick={() => setIsMobileMenuOpen(false)}>Our Apps</a></li>
             <li><a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About Studio</a></li>
-            <li><a href="#privacy" onClick={() => { setIsPrivacyModalOpen(true); setIsMobileMenuOpen(false); }}>Privacy Policies</a></li>
+            <li><a href="#faq" onClick={() => setIsMobileMenuOpen(false)}>FAQ</a></li>
             <li><a href="#support" onClick={() => setIsMobileMenuOpen(false)}>Feedback & Contact</a></li>
           </ul>
 
@@ -165,7 +169,7 @@ export default function App() {
         </h1>
 
         <p className="studio-subtitle">
-          Welcome to <strong>Aarsh Tech Web</strong>. We engineer high-performance, battery-efficient, and privacy-first Android applications on Google Play — with butter-smooth Flutter architecture and cutting-edge UI.
+          Welcome to <strong>Aarsh Tech</strong>. We engineer high-performance, battery-efficient, and privacy-first Android applications on Google Play — with butter-smooth Flutter architecture and cutting-edge UI.
         </p>
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
@@ -298,8 +302,19 @@ export default function App() {
                     onClick={() => setSelectedAppModal(app)}
                   >
                     <Info size={16} />
-                    <span>View App Details</span>
+                    <span>View Details</span>
                   </button>
+
+                  <a 
+                    href={app.privacyPolicyUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="app-details-btn"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    <ShieldCheck size={16} />
+                    <span>Privacy Policy ↗</span>
+                  </a>
                 </div>
               </div>
             ))}
@@ -313,7 +328,7 @@ export default function App() {
           <div className="section-title">
             <span style={{ color: 'var(--color-x-purple)', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.1em' }}>BEHIND THE CODE</span>
             <h2>DEVELOPMENT PRINCIPLES</h2>
-            <p>Every product published under Aarsh Tech Web is built on three core pillars.</p>
+            <p>Every product published under Aarsh Tech is built on three core pillars.</p>
           </div>
 
           <div className="features-grid">
@@ -345,7 +360,7 @@ export default function App() {
       </section>
 
       {/* FREQUENTLY ASKED QUESTIONS */}
-      <section className="section">
+      <section id="faq" className="section">
         <div className="container">
           <div className="section-title">
             <span style={{ color: 'var(--color-o-orange)', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.1em' }}>HELP & INQUIRIES</span>
@@ -356,7 +371,7 @@ export default function App() {
           <div className="faq-list" style={{ maxWidth: 780, margin: '0 auto' }}>
             {[
               {
-                q: "Where can I download Aarsh Tech Web apps?",
+                q: "Where can I download Aarsh Tech apps?",
                 a: "All our official applications and games are published directly on the Google Play Store for Android. You can click any 'Get on Google Play' button on this site to install them safely."
               },
               {
@@ -370,6 +385,10 @@ export default function App() {
               {
                 q: "Can I play Tic Tac Toe offline without internet?",
                 a: "Yes! Tic Tac Toe is completely offline-capable. You can challenge smart AI difficulty engines or play pass-and-play matches with friends on one phone anywhere."
+              },
+              {
+                q: "Where can I view the Privacy Policies for the apps?",
+                a: "Each app has its dedicated official Privacy Policy hosted on Google Sites, accessible directly via the 'Privacy Policy ↗' button on each app card and in the footer."
               },
               {
                 q: "How can I report a bug or request a new feature?",
@@ -433,7 +452,7 @@ export default function App() {
 
               <div className="email-launch-buttons">
                 <a 
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=aarsh.official.dev@gmail.com&su=Aarsh%20Tech%20Web%20App%20Feedback" 
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=aarsh.official.dev@gmail.com&su=Aarsh%20Tech%20App%20Feedback" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="gmail-compose-btn"
@@ -443,7 +462,7 @@ export default function App() {
                 </a>
 
                 <a 
-                  href="mailto:aarsh.official.dev@gmail.com?subject=Aarsh%20Tech%20Web%20Feedback" 
+                  href="mailto:aarsh.official.dev@gmail.com?subject=Aarsh%20Tech%20Feedback" 
                   className="mailto-compose-btn"
                 >
                   <Mail size={18} />
@@ -530,8 +549,8 @@ export default function App() {
           <div className="footer-grid">
             <div className="footer-brand">
               <a href="#home" className="nav-brand" style={{ marginBottom: 12 }}>
-                <img src="/studio_logo.svg" alt="Aarsh Tech Web Studio Logo" className="brand-icon" />
-                <span>Aarsh Tech Web</span>
+                <img src="/studio_logo.svg" alt="Aarsh Tech Studio Logo" className="brand-icon" />
+                <span>Aarsh Tech</span>
               </a>
               <p>
                 Independent Android Development Studio. Creating high-performance, battery-friendly, and privacy-respecting mobile experiences on Google Play.
@@ -549,11 +568,11 @@ export default function App() {
             </div>
 
             <div className="footer-col">
-              <h4>Play Store & Legal</h4>
+              <h4>Privacy Policies (Direct)</h4>
               <ul>
-                <li><button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }} onClick={() => { setPrivacyTab('tictactoe'); setIsPrivacyModalOpen(true); }}>Tic Tac Toe Privacy Policy</button></li>
-                <li><button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }} onClick={() => { setPrivacyTab('cleansnap'); setIsPrivacyModalOpen(true); }}>Duplicate Photo Finder Policy</button></li>
-                <li><button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }} onClick={() => { setPrivacyTab('general'); setIsPrivacyModalOpen(true); }}>General Studio Privacy</button></li>
+                <li><a href={TICTACTOE_PRIVACY_URL} target="_blank" rel="noopener noreferrer">Tic Tac Toe Policy ↗</a></li>
+                <li><a href={DUPLICATE_PRIVACY_URL} target="_blank" rel="noopener noreferrer">Duplicate Photo Finder Policy ↗</a></li>
+                <li><a href={DEVELOPER_PROFILE_URL} target="_blank" rel="noopener noreferrer">Google Play Developer Profile ↗</a></li>
                 <li><a href="#support">Feedback & Support</a></li>
               </ul>
             </div>
@@ -562,7 +581,7 @@ export default function App() {
               <h4>Studio Credentials</h4>
               <ul>
                 <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Developer: <strong style={{ color: '#fff' }}>Aarsh</strong></li>
-                <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Company: <strong style={{ color: '#fff' }}>Aarsh Tech Web</strong></li>
+                <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Studio: <strong style={{ color: '#fff' }}>Aarsh Tech</strong></li>
                 <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Email: <a href="mailto:aarsh.official.dev@gmail.com" style={{ color: 'var(--color-x-purple)' }}>aarsh.official.dev@gmail.com</a></li>
                 <li style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Google Play: <a href={DEVELOPER_PROFILE_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#38bdf8', textDecoration: 'underline' }}>Aarsh Tech Profile ↗</a></li>
               </ul>
@@ -570,7 +589,7 @@ export default function App() {
           </div>
 
           <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} Aarsh Tech Web. All Rights Reserved. Designed & Developed by Aarsh.</p>
+            <p>© {new Date().getFullYear()} Aarsh Tech. All Rights Reserved. Designed & Developed by Aarsh.</p>
           </div>
         </div>
       </footer>
@@ -637,144 +656,15 @@ export default function App() {
                 <span>Open in Google Play Store</span>
               </a>
 
-              <button 
+              <a 
+                href={selectedAppModal.privacyPolicyUrl} 
+                target="_blank" 
+                rel="noopener noreferrer" 
                 className="app-details-btn"
-                onClick={() => {
-                  setPrivacyTab(selectedAppModal.id);
-                  setSelectedAppModal(null);
-                  setIsPrivacyModalOpen(true);
-                }}
               >
                 <ShieldCheck size={16} />
-                <span>View Privacy Policy</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* UNIFIED PRIVACY POLICY CENTER MODAL */}
-      {isPrivacyModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsPrivacyModalOpen(false)}>
-          <div className="modal-content privacy-modal-styled" onClick={(e) => e.stopPropagation()}>
-            <button className="close-btn" onClick={() => setIsPrivacyModalOpen(false)}>
-              <X size={20} />
-            </button>
-
-            <div className="privacy-header">
-              <ShieldCheck size={32} style={{ color: 'var(--color-x-purple)' }} />
-              <div>
-                <h2 style={{ fontSize: '1.65rem', fontWeight: 800 }}>Aarsh Tech Web Privacy Policy Center</h2>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: 4 }}>
-                  Official Google Play Compliance Documentation • Developer: <strong>Aarsh</strong>
-                </p>
-              </div>
-            </div>
-
-            {/* Privacy Tabs */}
-            <div className="privacy-tabs-bar">
-              <button 
-                className={`privacy-tab-btn ${privacyTab === 'tictactoe' ? 'active' : ''}`}
-                onClick={() => setPrivacyTab('tictactoe')}
-              >
-                Tic Tac Toe Policy (com.aarsh.tictactoe)
-              </button>
-              <button 
-                className={`privacy-tab-btn ${privacyTab === 'cleansnap' ? 'active' : ''}`}
-                onClick={() => setPrivacyTab('cleansnap')}
-              >
-                Duplicate Photo Finder (com.aarsh.duplicatephotofinder)
-              </button>
-              <button 
-                className={`privacy-tab-btn ${privacyTab === 'general' ? 'active' : ''}`}
-                onClick={() => setPrivacyTab('general')}
-              >
-                General Studio Terms
-              </button>
-            </div>
-
-            <div className="privacy-body">
-              {privacyTab === 'tictactoe' && (
-                <>
-                  <p className="privacy-intro">
-                    This Privacy Policy applies to the mobile game <strong>Tic Tac Toe : 2 Player XO & AI</strong> (`com.aarsh.tictactoe`). It outlines how the application operates with respect to user data, offline functionality, and Google Mobile Ads (AdMob) SDK integration.
-                  </p>
-
-                  <div className="privacy-section-box">
-                    <h4>1. Zero Personal Data Collection</h4>
-                    <p>We do not collect, transmit, or sell personal identifiers such as name, phone number, address, contacts, or biometric data.</p>
-                  </div>
-
-                  <div className="privacy-section-box">
-                    <h4>2. Google Mobile Ads (AdMob) Integration</h4>
-                    <p>
-                      To support ongoing maintenance and free access, the game integrates the Google Mobile Ads SDK. Google AdMob may process pseudonymous technical device identifiers (Android Advertising ID, IP address, OS version) and crash logs to serve non-intrusive advertisements and monitor ad fraud.
-                    </p>
-                    <p>
-                      Refer to <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-x-purple)' }}>Google Ad Policies</a> for further details.
-                    </p>
-                  </div>
-
-                  <div className="privacy-section-box">
-                    <h4>3. Permissions & Local Storage</h4>
-                    <p>The game requires <code>android.permission.INTERNET</code> solely to fetch ad assets. Game progress, 20-level XP, win streaks, and sound settings are saved strictly locally in Android SharedPreferences.</p>
-                  </div>
-                </>
-              )}
-
-              {privacyTab === 'cleansnap' && (
-                <>
-                  <p className="privacy-intro">
-                    This Privacy Policy applies to <strong>Duplicate Photo Finder & Cleaner (CleanSnap)</strong> (`com.aarsh.duplicatephotofinder`). It details our strict local-only media processing architecture.
-                  </p>
-
-                  <div className="privacy-section-box">
-                    <h4>1. 100% Local Media Processing</h4>
-                    <p>
-                      The Application is built as a local device utility. All duplicate image comparisons, perceptual dHash calculations, and blurry photo evaluations occur <strong>strictly inside your device RAM</strong>.
-                    </p>
-                    <p>
-                      <strong>Photos, filenames, and image hashes are NEVER uploaded to remote cloud servers or third parties.</strong>
-                    </p>
-                  </div>
-
-                  <div className="privacy-section-box">
-                    <h4>2. Media Storage Permissions Disclosure</h4>
-                    <p>
-                      The app requests <code>READ_MEDIA_IMAGES</code> (Android 13+) or <code>READ_EXTERNAL_STORAGE</code> (Android 12 and below) exclusively to read photos for duplicate detection. File deletions require explicit native confirmation via Android's secure <code>MediaStore.createDeleteRequest</code>.
-                    </p>
-                  </div>
-
-                  <div className="privacy-section-box">
-                    <h4>3. Data Retention Period: Zero (0) Days</h4>
-                    <p>No user photos, thumbnails, or metadata are ever saved externally. Uninstalling the app completely removes all local caches.</p>
-                  </div>
-                </>
-              )}
-
-              {privacyTab === 'general' && (
-                <>
-                  <p className="privacy-intro">
-                    General privacy and terms of service for all mobile software published by <strong>Aarsh Tech Web</strong>.
-                  </p>
-
-                  <div className="privacy-section-box">
-                    <h4>Children's Privacy (COPPA Compliance)</h4>
-                    <p>Our applications do not knowingly collect personal information from children under 13. All integrated ad SDKs are configured under Google Play Families policy standards.</p>
-                  </div>
-
-                  <div className="privacy-section-box">
-                    <h4>Contacting the Developer</h4>
-                    <p>For inquiries, questions, or privacy requests across any Aarsh Tech Web application, contact <strong>aarsh.official.dev@gmail.com</strong>.</p>
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="privacy-footer">
-              <button className="btn-primary" onClick={() => setIsPrivacyModalOpen(false)}>
-                I Understand
-              </button>
+                <span>Direct Privacy Policy ↗</span>
+              </a>
             </div>
           </div>
         </div>
