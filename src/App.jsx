@@ -1,29 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import confetti from 'canvas-confetti';
+import React, { useState } from 'react';
 import { 
-  Users, 
   Cpu, 
   ShieldCheck, 
-  Send, 
   X, 
   Trophy, 
   Zap, 
-  RotateCcw, 
   Menu, 
   Copy, 
   Check, 
   ChevronDown, 
   Sparkles, 
-  Play,
-  Layers,
-  ExternalLink,
-  Trash2,
-  Image,
-  Smartphone,
-  HardDrive,
-  Eye,
-  CheckCircle2,
-  Info
+  Layers, 
+  ExternalLink, 
+  Trash2, 
+  Image, 
+  Smartphone, 
+  HardDrive, 
+  Eye, 
+  CheckCircle2, 
+  Info,
+  Mail,
+  Send,
+  ArrowRight,
+  MessageSquare
 } from 'lucide-react';
 import './App.css';
 
@@ -36,171 +35,15 @@ export default function App() {
   const [activeFaq, setActiveFaq] = useState(0);
   const [filterCategory, setFilterCategory] = useState('all'); // 'all' | 'games' | 'tools'
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [contactForm, setContactForm] = useState({ name: '', email: '', subject: 'App Feedback & Support', message: '' });
-
-  // Playable Mini Demo State (for Tic Tac Toe)
-  const [gameMode, setGameMode] = useState('infinity'); // 'infinity' | 'classic'
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [turn, setTurn] = useState('X');
-  const [xMoves, setXMoves] = useState([]);
-  const [oMoves, setOMoves] = useState([]);
-  const [winner, setWinner] = useState(null);
-  const [winningLine, setWinningLine] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [scores, setScores] = useState({ X: 0, O: 0, draws: 0 });
-  const [vsAi, setVsAi] = useState(true);
 
   // URLs
   const TICTACTOE_PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.aarsh.tictactoe&hl=en_IN";
   const DUPLICATE_PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.aarsh.duplicatephotofinder&hl=en_IN";
 
-  // Check 3x3 Win condition for Playable Demo
-  const checkWinner = (currentBoard) => {
-    const lines = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6]
-    ];
-    for (const [a, b, c] of lines) {
-      if (currentBoard[a] && currentBoard[a] === currentBoard[b] && currentBoard[a] === currentBoard[c]) {
-        return { winner: currentBoard[a], line: [a, b, c] };
-      }
-    }
-    if (!currentBoard.includes(null)) {
-      return { winner: 'draw', line: [] };
-    }
-    return null;
-  };
-
-  const resetGame = (newMode = gameMode) => {
-    setBoard(Array(9).fill(null));
-    setTurn('X');
-    setXMoves([]);
-    setOMoves([]);
-    setWinner(null);
-    setWinningLine([]);
-    setHistory([]);
-    setGameMode(newMode);
-  };
-
-  const handleCellClick = (index) => {
-    if (board[index] || winner) return;
-
-    setHistory(prev => [...prev, {
-      board: [...board],
-      turn,
-      xMoves: [...xMoves],
-      oMoves: [...oMoves]
-    }]);
-
-    const newBoard = [...board];
-    let newXMoves = [...xMoves];
-    let newOMoves = [...oMoves];
-
-    if (gameMode === 'infinity') {
-      const currentQueue = turn === 'X' ? newXMoves : newOMoves;
-      if (currentQueue.length >= 3) {
-        const oldestIndex = currentQueue.shift();
-        newBoard[oldestIndex] = null;
-      }
-      currentQueue.push(index);
-      newBoard[index] = turn;
-      if (turn === 'X') setXMoves(newXMoves);
-      else setOMoves(newOMoves);
-    } else {
-      newBoard[index] = turn;
-    }
-
-    setBoard(newBoard);
-
-    const winResult = checkWinner(newBoard);
-    if (winResult) {
-      setWinner(winResult.winner);
-      setWinningLine(winResult.line);
-      if (winResult.winner !== 'draw') {
-        confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
-        setScores(prev => ({ ...prev, [winResult.winner]: prev[winResult.winner] + 1 }));
-      } else {
-        setScores(prev => ({ ...prev, draws: prev.draws + 1 }));
-      }
-    } else {
-      setTurn(turn === 'X' ? 'O' : 'X');
-    }
-  };
-
-  const handleCellClickRef = useRef(handleCellClick);
-  useEffect(() => {
-    handleCellClickRef.current = handleCellClick;
-  });
-
-  // AI Move Handler in Demo
-  useEffect(() => {
-    if (!vsAi || turn !== 'O' || winner) return;
-
-    const timer = setTimeout(() => {
-      const emptyIndices = board
-        .map((val, idx) => (val === null ? idx : null))
-        .filter(val => val !== null);
-
-      if (emptyIndices.length === 0) return;
-
-      let chosenMove = null;
-      // 1. Can AI win?
-      for (const idx of emptyIndices) {
-        const testBoard = [...board];
-        if (gameMode === 'infinity' && oMoves.length >= 3) testBoard[oMoves[0]] = null;
-        testBoard[idx] = 'O';
-        const res = checkWinner(testBoard);
-        if (res && res.winner === 'O') { chosenMove = idx; break; }
-      }
-      // 2. Block player X win
-      if (chosenMove === null) {
-        for (const idx of emptyIndices) {
-          const testBoard = [...board];
-          if (gameMode === 'infinity' && xMoves.length >= 3) testBoard[xMoves[0]] = null;
-          testBoard[idx] = 'X';
-          const res = checkWinner(testBoard);
-          if (res && res.winner === 'X') { chosenMove = idx; break; }
-        }
-      }
-      // 3. Center
-      if (chosenMove === null && emptyIndices.includes(4)) chosenMove = 4;
-      // 4. Random fallback
-      if (chosenMove === null) chosenMove = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-
-      handleCellClickRef.current(chosenMove);
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [turn, vsAi, winner, board, gameMode, xMoves, oMoves]);
-
-  const handleUndo = () => {
-    if (history.length === 0 || winner) return;
-    const last = history[history.length - 1];
-    setBoard(last.board);
-    setTurn(last.turn);
-    setXMoves(last.xMoves);
-    setOMoves(last.oMoves);
-    setHistory(prev => prev.slice(0, -1));
-  };
-
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('aarsh.official.dev@gmail.com');
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2500);
-  };
-
-  const handleContactSubmit = (e) => {
-    e.preventDefault();
-    const subject = encodeURIComponent(`${contactForm.subject} - ${contactForm.name}`);
-    const body = encodeURIComponent(`Name: ${contactForm.name}\nEmail: ${contactForm.email}\n\nMessage:\n${contactForm.message}`);
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=aarsh.official.dev@gmail.com&su=${subject}&body=${body}`, '_blank');
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormSubmitted(false);
-      setContactForm({ name: '', email: '', subject: 'App Feedback & Support', message: '' });
-    }, 6000);
   };
 
   // Published Apps Catalog
@@ -215,13 +58,13 @@ export default function App() {
       badge: 'Version 2.0 • Featured Game',
       badgeColor: 'badge-purple',
       playStoreUrl: TICTACTOE_PLAY_STORE_URL,
-      shortDesc: 'Futuristic neon cyberpunk Tic Tac Toe on Android with revolutionary Infinity Vanishing Mode, 3x3 to 6x6 expanded boards, 20 ranked tiers, and local 2-player battles.',
+      shortDesc: 'Futuristic neon cyberpunk Tic Tac Toe on Android featuring the all-new Infinity Vanishing Mode, 3x3 to 6x6 expanded board sizes, 20 ranked tiers, and local 2-player battles.',
       highlights: [
         { icon: <Zap size={18} style={{ color: 'var(--color-x-purple)' }} />, title: 'All-New Infinity Mode', desc: 'Max 3 marks per player. 4th move vanishes oldest mark; matches never end in draws!' },
-        { icon: <Layers size={18} style={{ color: 'var(--color-x-purple)' }} />, title: '4 Grid Sizes (3x3 to 6x6)', desc: 'Play classic 3x3 or expanded 4x4, 5x5, and customizable 6x6 ultimate boards.' },
-        { icon: <Cpu size={18} style={{ color: 'var(--color-x-purple)' }} />, title: 'Dual Strategic AI Engine', desc: 'Isolate-powered minimax algorithms for both Classic & Infinity modes.' },
+        { icon: <Layers size={18} style={{ color: 'var(--color-x-purple)' }} />, title: '4 Grid Sizes (3x3 to 6x6)', desc: 'Play classic 3x3 or expanded 4x4, 5x5, and customizable 6x6 ultimate challenge boards.' },
+        { icon: <Cpu size={18} style={{ color: 'var(--color-x-purple)' }} />, title: 'Dual Strategic AI Engine', desc: 'Isolate-powered minimax algorithms for both Classic & Infinity modes across Easy, Medium, and Hard.' },
         { icon: <Trophy size={18} style={{ color: 'var(--color-x-purple)' }} />, title: '20 Ranks & 5 Master Tiers', desc: 'Climb Bronze, Silver, Gold, Diamond, and Master tiers by earning match XP.' },
-        { icon: <Sparkles size={18} style={{ color: 'var(--color-x-purple)' }} />, title: '8 Neon Cyberpunk Themes', desc: 'High-contrast visuals, customizable audio FX, and live turn undo.' }
+        { icon: <Sparkles size={18} style={{ color: 'var(--color-x-purple)' }} />, title: '8 Neon Cyberpunk Themes', desc: 'High-contrast visuals, customizable audio FX, coin flip, and live turn undo.' }
       ],
       specs: {
         platform: 'Android 7.0 and up',
@@ -243,10 +86,10 @@ export default function App() {
       playStoreUrl: DUPLICATE_PLAY_STORE_URL,
       shortDesc: 'Intelligent on-device gallery organizer that identifies duplicate copies, blurry shots, and old screenshots using perceptual dHash algorithms to reclaim gigabytes safely.',
       highlights: [
-        { icon: <Image size={18} style={{ color: '#38bdf8' }} />, title: 'Exact & Similar Photo Detection', desc: 'MD5 byte verification & dHash perceptual algorithms accurately group duplicates.' },
+        { icon: <Image size={18} style={{ color: '#38bdf8' }} />, title: 'Exact & Similar Photo Detection', desc: 'MD5 byte verification & dHash perceptual algorithms accurately group duplicate pictures.' },
         { icon: <Eye size={18} style={{ color: '#38bdf8' }} />, title: 'Blurry Photo Analyzer', desc: 'Automatically flags low-quality, out-of-focus pictures so you can purge them easily.' },
         { icon: <Smartphone size={18} style={{ color: '#38bdf8' }} />, title: 'Screenshot Cleanup Manager', desc: 'Auto-groups forgotten receipts, memes, and screenshots by month for 1-tap removal.' },
-        { icon: <ShieldCheck size={18} style={{ color: '#38bdf8' }} />, title: '100% On-Device & Private', desc: 'Photos never leave your phone. All scanning runs entirely inside local RAM.' },
+        { icon: <ShieldCheck size={18} style={{ color: '#38bdf8' }} />, title: '100% On-Device & Private', desc: 'Photos never leave your phone. All scanning runs entirely inside local device RAM.' },
         { icon: <Trash2 size={18} style={{ color: '#38bdf8' }} />, title: 'Safe System Deletion', desc: 'Uses Android MediaStore security confirmation to prevent accidental file loss.' }
       ],
       specs: {
@@ -265,16 +108,13 @@ export default function App() {
     return true;
   });
 
-  const oldestX = (gameMode === 'infinity' && xMoves.length === 3) ? xMoves[0] : null;
-  const oldestO = (gameMode === 'infinity' && oMoves.length === 3) ? oMoves[0] : null;
-
   return (
     <div className="app-root">
       {/* Sticky Studio Navbar */}
       <nav className="navbar">
         <div className="container nav-container">
           <a href="#home" className="nav-brand">
-            <img src="/app_icons/tictactoe.png" alt="Aarsh Tech Web Logo" className="brand-icon" />
+            <img src="/studio_logo.svg" alt="Aarsh Tech Web Studio Logo" className="brand-icon" />
             <span className="brand-title">
               Aarsh Tech Web
               <small className="brand-sub">Android Apps & Games Studio</small>
@@ -284,10 +124,9 @@ export default function App() {
           <ul className={`nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
             <li><a href="#home" onClick={() => setIsMobileMenuOpen(false)}>Home</a></li>
             <li><a href="#apps" onClick={() => setIsMobileMenuOpen(false)}>Our Apps</a></li>
-            <li><a href="#demo" onClick={() => setIsMobileMenuOpen(false)}>Live Demo</a></li>
             <li><a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About Studio</a></li>
             <li><a href="#privacy" onClick={() => { setIsPrivacyModalOpen(true); setIsMobileMenuOpen(false); }}>Privacy Policies</a></li>
-            <li><a href="#support" onClick={() => setIsMobileMenuOpen(false)}>Support</a></li>
+            <li><a href="#support" onClick={() => setIsMobileMenuOpen(false)}>Feedback & Contact</a></li>
           </ul>
 
           <div className="nav-cta">
@@ -333,7 +172,9 @@ export default function App() {
             <span>Explore Published Apps</span>
           </a>
           <a 
-            href="#demo" 
+            href={TICTACTOE_PLAY_STORE_URL} 
+            target="_blank" 
+            rel="noopener noreferrer"
             className="btn-secondary" 
             style={{ 
               display: 'inline-flex', 
@@ -347,8 +188,8 @@ export default function App() {
               fontWeight: 700 
             }}
           >
-            <Play size={18} style={{ color: 'var(--color-o-orange)' }} />
-            <span>Try Game in Browser</span>
+            <ExternalLink size={18} style={{ color: 'var(--color-o-orange)' }} />
+            <span>Google Play Profile</span>
           </a>
         </div>
 
@@ -368,7 +209,7 @@ export default function App() {
           </div>
           <div className="studio-stat-col">
             <div className="studio-stat-num">0 Paywalls</div>
-            <div className="studio-stat-label">Free to Download</div>
+            <div className="studio-stat-label">Free on Google Play</div>
           </div>
         </div>
       </header>
@@ -456,19 +297,8 @@ export default function App() {
                     onClick={() => setSelectedAppModal(app)}
                   >
                     <Info size={16} />
-                    <span>View Details</span>
+                    <span>View App Details</span>
                   </button>
-
-                  {app.id === 'tictactoe' && (
-                    <a 
-                      href="#demo" 
-                      className="app-details-btn" 
-                      style={{ color: 'var(--color-o-orange)', borderColor: 'rgba(255,140,0,0.3)' }}
-                    >
-                      <Play size={15} />
-                      <span>Play Web Demo</span>
-                    </a>
-                  )}
                 </div>
               </div>
             ))}
@@ -476,124 +306,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* INTERACTIVE PLAYABLE GAME DEMO */}
-      <section id="demo" className="section" style={{ background: 'rgba(168,85,247,0.02)' }}>
-        <div className="container">
-          <div className="section-title">
-            <span style={{ color: 'var(--color-o-orange)', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.1em' }}>LIVE PRODUCT DEMO</span>
-            <h2>PLAY TIC TAC TOE IN YOUR BROWSER</h2>
-            <p>Experience the mechanics of our published game directly on this website — including the new Infinity Mode!</p>
-          </div>
-
-          <div className="game-widget">
-            <div className="game-header">
-              <div className="game-controls">
-                <button 
-                  className={`pill-btn ${gameMode === 'infinity' ? 'active' : ''}`}
-                  onClick={() => resetGame('infinity')}
-                >
-                  ♾️ Infinity Mode (Vanishing)
-                </button>
-                <button 
-                  className={`pill-btn ${gameMode === 'classic' ? 'active' : ''}`}
-                  onClick={() => resetGame('classic')}
-                >
-                  Classic 3×3
-                </button>
-              </div>
-
-              <div className="game-controls">
-                <button 
-                  className={`pill-btn ${vsAi ? 'active' : ''}`}
-                  onClick={() => { setVsAi(true); resetGame(); }}
-                >
-                  <Cpu size={14} style={{ display: 'inline', marginRight: 4 }} /> vs AI
-                </button>
-                <button 
-                  className={`pill-btn ${!vsAi ? 'active' : ''}`}
-                  onClick={() => { setVsAi(false); resetGame(); }}
-                >
-                  <Users size={14} style={{ display: 'inline', marginRight: 4 }} /> 2 Player
-                </button>
-              </div>
-            </div>
-
-            <div className="game-sub-banner">
-              <div>
-                Score: <strong>X ({scores.X})</strong> — <strong>O ({scores.O})</strong> — Draws: <strong>{scores.draws}</strong>
-              </div>
-              <div>
-                Turn: <span style={{ color: turn === 'X' ? 'var(--color-x-purple)' : 'var(--color-o-orange)', fontWeight: 800 }}>Player {turn}</span> {vsAi && turn === 'O' && '(AI Thinking...)'}
-              </div>
-            </div>
-
-            <div className="game-status-banner">
-              {winner ? (
-                winner === 'draw' ? (
-                  <span style={{ color: '#94a3b8' }}>Game Drawn! Well fought.</span>
-                ) : (
-                  <span style={{ color: winner === 'X' ? 'var(--color-x-purple)' : 'var(--color-o-orange)', fontWeight: 900 }}>
-                    🎉 Player {winner} Won the Match!
-                  </span>
-                )
-              ) : gameMode === 'infinity' ? (
-                <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                  Infinity Rule: Max 3 tokens per player. Dimmed token vanishes next!
-                </span>
-              ) : (
-                <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                  Connect 3 in a line to claim victory!
-                </span>
-              )}
-            </div>
-
-            <div className="tictactoe-grid grid-3x3">
-              {board.map((cellValue, idx) => {
-                const isWinnerCell = winningLine.includes(idx);
-                const isVanishing = (cellValue === 'X' && idx === oldestX) || (cellValue === 'O' && idx === oldestO);
-
-                return (
-                  <button
-                    key={idx}
-                    className={`cell-btn ${isWinnerCell ? 'winner-cell' : ''} ${isVanishing ? 'vanishing-piece' : ''}`}
-                    onClick={() => handleCellClick(idx)}
-                    disabled={!!cellValue || !!winner || (vsAi && turn === 'O')}
-                    style={{
-                      color: cellValue === 'X' ? 'var(--color-x-purple)' : 'var(--color-o-orange)',
-                      textShadow: cellValue ? (cellValue === 'X' ? '0 0 12px rgba(168,85,247,0.8)' : '0 0 12px rgba(255,140,0,0.8)') : 'none'
-                    }}
-                  >
-                    {cellValue}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <button 
-                className="pill-btn" 
-                onClick={handleUndo} 
-                disabled={history.length === 0 || !!winner}
-                style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-              >
-                <RotateCcw size={15} />
-                <span>Live Undo ({history.length})</span>
-              </button>
-
-              <button 
-                className="btn-primary" 
-                onClick={() => resetGame()}
-                style={{ padding: '8px 22px', fontSize: '0.9rem' }}
-              >
-                New Round
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ABOUT DEVELOPER & STUDIO PHILOSOPHY */}
-      <section id="about" className="section">
+      <section id="about" className="section" style={{ background: 'rgba(168,85,247,0.02)' }}>
         <div className="container">
           <div className="section-title">
             <span style={{ color: 'var(--color-x-purple)', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.1em' }}>BEHIND THE CODE</span>
@@ -630,7 +344,7 @@ export default function App() {
       </section>
 
       {/* FREQUENTLY ASKED QUESTIONS */}
-      <section className="section" style={{ background: 'rgba(168,85,247,0.02)' }}>
+      <section className="section">
         <div className="container">
           <div className="section-title">
             <span style={{ color: 'var(--color-o-orange)', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.1em' }}>HELP & INQUIRIES</span>
@@ -658,7 +372,7 @@ export default function App() {
               },
               {
                 q: "How can I report a bug or request a new feature?",
-                a: "You can send an email directly to developer Aarsh at aarsh.official.dev@gmail.com or fill out the Developer Support form below."
+                a: "You can send an email directly to developer Aarsh at aarsh.official.dev@gmail.com using the direct email buttons below."
               }
             ].map((faq, index) => {
               const isOpen = activeFaq === index;
@@ -680,112 +394,130 @@ export default function App() {
         </div>
       </section>
 
-      {/* DEVELOPER SUPPORT & CONTACT */}
-      <section id="support" className="section">
+      {/* DIRECT DEVELOPER SUPPORT & FEEDBACK HUB */}
+      <section id="support" className="section" style={{ background: 'rgba(168,85,247,0.02)' }}>
         <div className="container">
           <div className="section-title">
             <span style={{ color: 'var(--color-x-purple)', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.1em' }}>DIRECT CHANNEL</span>
-            <h2>DEVELOPER SUPPORT & CONTACT</h2>
-            <p>Connect with developer Aarsh for feature feedback, technical assistance, or partnership inquiries.</p>
+            <h2>FEEDBACK & DEVELOPER SUPPORT</h2>
+            <p>Connect with developer Aarsh directly. Click below to launch your email app or Gmail composer with pre-filled topics.</p>
           </div>
 
-          <div className="support-container" style={{ maxWidth: 960, margin: '0 auto' }}>
-            <div className="glass-card" style={{ padding: 32, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div className="feedback-hub-container">
+            {/* Box 1: Direct Email Actions */}
+            <div className="feedback-action-card">
               <div>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: 12 }}>Aarsh Tech Web Support</h3>
-                <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 24 }}>
-                  We are committed to delivering regular quality updates and bug fixes for all published products.
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                  <Mail size={22} style={{ color: 'var(--color-x-purple)' }} />
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Direct Developer Email</h3>
+                </div>
+                <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '0.95rem' }}>
+                  Have questions, found a bug, or have a feature suggestion? Reach out directly to our official developer mailbox.
                 </p>
 
-                <div style={{ marginBottom: 24 }}>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-dim)', marginBottom: 6 }}>OFFICIAL CONTACT EMAIL:</div>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-x-purple)', wordBreak: 'break-all' }}>
+                <div className="feedback-direct-email-box">
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+                    Official Mail Address:
+                  </div>
+                  <div className="feedback-email-text">
                     aarsh.official.dev@gmail.com
                   </div>
-                </div>
 
-                <button className="copy-email-btn" onClick={handleCopyEmail}>
-                  {copiedEmail ? <Check size={16} style={{ color: '#22c55e' }} /> : <Copy size={16} />}
-                  <span>{copiedEmail ? 'Email Copied to Clipboard!' : 'Copy Support Email'}</span>
-                </button>
+                  <button className="copy-email-btn" onClick={handleCopyEmail}>
+                    {copiedEmail ? <Check size={16} style={{ color: '#22c55e' }} /> : <Copy size={16} />}
+                    <span>{copiedEmail ? 'Email Copied to Clipboard!' : 'Copy Email Address'}</span>
+                  </button>
+                </div>
               </div>
 
-              <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)' }}>
-                  Developer Studio: <strong style={{ color: '#fff' }}>Aarsh Tech Web</strong>
-                </span>
+              <div className="email-launch-buttons">
+                <a 
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=aarsh.official.dev@gmail.com&su=Aarsh%20Tech%20Web%20App%20Feedback" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="gmail-compose-btn"
+                >
+                  <Send size={18} />
+                  <span>Open & Compose in Gmail</span>
+                </a>
+
+                <a 
+                  href="mailto:aarsh.official.dev@gmail.com?subject=Aarsh%20Tech%20Web%20Feedback" 
+                  className="mailto-compose-btn"
+                >
+                  <Mail size={18} />
+                  <span>Open Default Email App</span>
+                </a>
               </div>
             </div>
 
-            <div className="contact-form-card">
-              {formSubmitted && (
-                <div className="form-status-alert">
-                  <Check size={18} />
-                  <span>Draft generated in your Gmail! We will reply promptly.</span>
+            {/* Box 2: Quick Feedback Topics */}
+            <div className="feedback-action-card">
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                  <MessageSquare size={22} style={{ color: 'var(--color-o-orange)' }} />
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Quick Inquiries by Topic</h3>
                 </div>
-              )}
+                <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '0.95rem' }}>
+                  Choose your topic below to automatically open an email draft with a formatted subject line:
+                </p>
 
-              <form onSubmit={handleContactSubmit}>
-                <div className="form-group">
-                  <label htmlFor="name">Your Name</label>
-                  <input 
-                    type="text" 
-                    id="name"
-                    required
-                    className="form-control"
-                    placeholder="Enter your name"
-                    value={contactForm.name}
-                    onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                  />
+                <div className="quick-topics-grid">
+                  <a 
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=aarsh.official.dev@gmail.com&su=%5BBug%20Report%5D%20Issue%20Found%20in%20App" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="quick-topic-btn"
+                  >
+                    <span>🐛 Report a Bug / Crash</span>
+                    <ArrowRight size={16} />
+                  </a>
+
+                  <a 
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=aarsh.official.dev@gmail.com&su=%5BFeature%20Request%5D%20New%20Idea%20for%20App" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="quick-topic-btn"
+                  >
+                    <span>💡 Suggest a New Feature</span>
+                    <ArrowRight size={16} />
+                  </a>
+
+                  <a 
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=aarsh.official.dev@gmail.com&su=%5BTic%20Tac%20Toe%20Support%5D%20Inquiry" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="quick-topic-btn"
+                  >
+                    <span>🎮 Tic Tac Toe Support</span>
+                    <ArrowRight size={16} />
+                  </a>
+
+                  <a 
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=aarsh.official.dev@gmail.com&su=%5BDuplicate%20Photo%20Finder%20Support%5D%20Inquiry" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="quick-topic-btn"
+                  >
+                    <span>🖼️ Duplicate Photo Finder Support</span>
+                    <ArrowRight size={16} />
+                  </a>
+
+                  <a 
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=aarsh.official.dev@gmail.com&su=%5BGeneral%20Inquiry%5D%20Partnership%20or%20Studio" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="quick-topic-btn"
+                  >
+                    <span>🤝 Business / General Inquiries</span>
+                    <ArrowRight size={16} />
+                  </a>
                 </div>
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="email">Your Email Address</label>
-                  <input 
-                    type="email" 
-                    id="email"
-                    required
-                    className="form-control"
-                    placeholder="you@example.com"
-                    value={contactForm.email}
-                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="subject">Subject</label>
-                  <input 
-                    type="text" 
-                    id="subject"
-                    required
-                    className="form-control"
-                    placeholder="Bug Report / Tic Tac Toe / Duplicate Photo Finder"
-                    value={contactForm.subject}
-                    onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="message">Message</label>
-                  <textarea 
-                    id="message"
-                    required
-                    className="form-control"
-                    placeholder="Write your suggestions, issue details, or feedback..."
-                    value={contactForm.message}
-                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                  ></textarea>
-                </div>
-
-                <button 
-                  type="submit" 
-                  className="btn-primary" 
-                  style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: 8, padding: '14px 24px' }}
-                >
-                  <Send size={18} />
-                  <span>Send Message via Email</span>
-                </button>
-              </form>
+              <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)', fontSize: '0.85rem', color: 'var(--text-dim)' }}>
+                Response Time: Developer Aarsh typically reviews and replies within <strong>24–48 hours</strong>.
+              </div>
             </div>
           </div>
         </div>
@@ -797,7 +529,7 @@ export default function App() {
           <div className="footer-grid">
             <div className="footer-brand">
               <a href="#home" className="nav-brand" style={{ marginBottom: 12 }}>
-                <img src="/app_icons/tictactoe.png" alt="Aarsh Tech Web Logo" className="brand-icon" />
+                <img src="/studio_logo.svg" alt="Aarsh Tech Web Studio Logo" className="brand-icon" />
                 <span>Aarsh Tech Web</span>
               </a>
               <p>
@@ -810,7 +542,7 @@ export default function App() {
               <ul>
                 <li><a href={TICTACTOE_PLAY_STORE_URL} target="_blank" rel="noopener noreferrer">Tic Tac Toe : 2 Player XO & AI</a></li>
                 <li><a href={DUPLICATE_PLAY_STORE_URL} target="_blank" rel="noopener noreferrer">Duplicate Photo Finder & Cleaner</a></li>
-                <li><a href="#demo">Web Mini Demo</a></li>
+                <li><a href="#apps">All Releases</a></li>
                 <li><a href="#about">Studio Philosophy</a></li>
               </ul>
             </div>
@@ -821,7 +553,7 @@ export default function App() {
                 <li><button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }} onClick={() => { setPrivacyTab('tictactoe'); setIsPrivacyModalOpen(true); }}>Tic Tac Toe Privacy Policy</button></li>
                 <li><button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }} onClick={() => { setPrivacyTab('cleansnap'); setIsPrivacyModalOpen(true); }}>Duplicate Photo Finder Policy</button></li>
                 <li><button style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }} onClick={() => { setPrivacyTab('general'); setIsPrivacyModalOpen(true); }}>General Studio Privacy</button></li>
-                <li><a href="#support">Report an Issue</a></li>
+                <li><a href="#support">Feedback & Support</a></li>
               </ul>
             </div>
 
@@ -851,7 +583,7 @@ export default function App() {
             </button>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 20 }}>
-              <img src={selectedAppModal.icon} alt={selectedAppModal.name} style={{ width: 72, height: 72, borderRadius: 18, border: '1px solid rgba(255,255,255,0.1)' }} />
+              <img src={selectedAppModal.icon} alt={selectedAppModal.name} style={{ width: 72, height: 72, borderRadius: 18, border: '1px solid rgba(255,255,255,0.1)', objectFit: 'cover' }} />
               <div>
                 <span className={`app-card-badge ${selectedAppModal.badgeColor}`}>{selectedAppModal.badge}</span>
                 <h2 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#fff', margin: '4px 0' }}>{selectedAppModal.name}</h2>

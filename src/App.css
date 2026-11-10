@@ -2265,3 +2265,134 @@ textarea.form-control {
   background: rgba(168, 85, 247, 0.2);
   color: #fff;
 }
+
+
+/* ==========================================================
+   DIRECT EMAIL FEEDBACK & SUPPORT HUB STYLES
+   ========================================================== */
+
+.feedback-hub-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+@media (max-width: 840px) {
+  .feedback-hub-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feedback-action-card {
+  background: rgba(22, 13, 38, 0.85);
+  border: 1px solid var(--border-glass);
+  border-radius: 28px;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.feedback-direct-email-box {
+  background: rgba(12, 6, 22, 0.9);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 18px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.feedback-email-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  font-family: var(--font-heading);
+  letter-spacing: 0.02em;
+  word-break: break-all;
+  margin-bottom: 12px;
+}
+
+.email-launch-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.gmail-compose-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #ea4335 0%, #c5221f 100%);
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 18px rgba(234, 67, 53, 0.35);
+}
+
+.gmail-compose-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(234, 67, 53, 0.5);
+  color: #fff;
+}
+
+.mailto-compose-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 18px rgba(147, 51, 234, 0.35);
+}
+
+.mailto-compose-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(147, 51, 234, 0.5);
+  color: #fff;
+}
+
+/* Quick Topic Pills */
+.quick-topics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.quick-topic-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 18px;
+  border-radius: 14px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.quick-topic-btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: var(--color-x-purple);
+  transform: translateX(4px);
+  color: #fff;
+}
