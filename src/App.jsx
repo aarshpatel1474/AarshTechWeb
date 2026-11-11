@@ -34,6 +34,9 @@ export default function App() {
   const [filterCategory, setFilterCategory] = useState('all'); // 'all' | 'games' | 'tools'
   const [copiedEmail, setCopiedEmail] = useState(false);
 
+  // Base URL for GitHub Pages / subpaths
+  const BASE = import.meta.env.BASE_URL;
+
   // URLs
   const DEVELOPER_PROFILE_URL = "https://play.google.com/store/apps/developer?id=Aarsh+Tech&hl=en_IN";
   const TICTACTOE_PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.aarsh.tictactoe&hl=en_IN";
@@ -57,7 +60,7 @@ export default function App() {
       name: 'Tic Tac Toe : 2 Player XO & AI',
       packageId: 'com.aarsh.tictactoe',
       version: 'v2.0.0 (Latest)',
-      icon: '/tictactoe_icon.jpg',
+      icon: `${BASE}tictactoe_icon.jpg`,
       badge: 'Version 2.0 • Featured Game',
       badgeColor: 'badge-purple',
       playStoreUrl: TICTACTOE_PLAY_STORE_URL,
@@ -84,7 +87,7 @@ export default function App() {
       name: 'Duplicate Photo Finder & Cleaner',
       packageId: 'com.aarsh.duplicatephotofinder',
       version: 'v1.2.0 (Active)',
-      icon: '/cleansnap_icon.jpg',
+      icon: `${BASE}cleansnap_icon.jpg`,
       badge: 'Storage Saver • Top Utility',
       badgeColor: 'badge-blue',
       playStoreUrl: DUPLICATE_PLAY_STORE_URL,
@@ -119,7 +122,7 @@ export default function App() {
       <nav className="navbar">
         <div className="container nav-container">
           <a href="#home" className="nav-brand">
-            <img src="/studio_logo.svg" alt="Aarsh Tech Studio Logo" className="brand-icon" />
+            <img src={`${BASE}studio_logo.svg`} alt="Aarsh Tech Studio Logo" className="brand-icon" />
             <span className="brand-title">
               Aarsh Tech
               <small className="brand-sub">Android Apps & Games Studio</small>
@@ -549,7 +552,7 @@ export default function App() {
           <div className="footer-grid">
             <div className="footer-brand">
               <a href="#home" className="nav-brand" style={{ marginBottom: 12 }}>
-                <img src="/studio_logo.svg" alt="Aarsh Tech Studio Logo" className="brand-icon" />
+                <img src={`${BASE}studio_logo.svg`} alt="Aarsh Tech Studio Logo" className="brand-icon" />
                 <span>Aarsh Tech</span>
               </a>
               <p>
