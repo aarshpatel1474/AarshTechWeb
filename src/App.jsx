@@ -284,7 +284,7 @@ export default function App() {
                     href={app.playStoreUrl} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className={`playstore-btn ${app.id === 'tictactoe' ? 'playstore-btn-purple' : ''}`}
+                    className="playstore-btn playstore-btn-purple"
                     style={{ flex: '1 1 180px', justifyContent: 'center' }}
                   >
                     <ExternalLink size={18} />
