@@ -2033,13 +2033,13 @@ textarea.form-control {
 }
 
 .app-card-cleansnap {
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 35px rgba(56, 189, 248, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 35px rgba(168, 85, 247, 0.15);
 }
 
 .app-card-cleansnap:hover {
-  border-color: #38bdf8;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(56, 189, 248, 0.3);
+  border-color: var(--color-x-purple);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(168, 85, 247, 0.3);
 }
 
 .app-card-header {

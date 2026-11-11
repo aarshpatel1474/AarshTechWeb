@@ -117,34 +117,34 @@ export default function App() {
       packageId: 'com.aarsh.duplicatephotofinder',
       icon: cleansnapIcon,
       badge: 'Top Utility',
-      badgeColor: 'badge-blue',
+      badgeColor: 'badge-purple',
       categoryLabel: 'Storage & Productivity Tool',
       playStoreUrl: DUPLICATE_PLAY_STORE_URL,
       privacyPolicyUrl: DUPLICATE_PRIVACY_URL,
       shortDesc: 'Intelligent on-device gallery organizer that identifies duplicate copies, blurry shots, and old screenshots using perceptual dHash algorithms to reclaim gigabytes safely.',
       highlights: [
         { 
-          icon: <Image size={18} style={{ color: '#38bdf8' }} />, 
+          icon: <Image size={18} style={{ color: 'var(--color-x-purple)' }} />, 
           title: 'Exact & Similar Photo Detection', 
           desc: 'MD5 byte verification & dHash perceptual algorithms accurately group duplicate pictures.' 
         },
         { 
-          icon: <Eye size={18} style={{ color: '#38bdf8' }} />, 
+          icon: <Eye size={18} style={{ color: 'var(--color-x-purple)' }} />, 
           title: 'Blurry Photo Analyzer', 
           desc: 'Automatically flags low-quality, out-of-focus pictures so you can purge them easily.' 
         },
         { 
-          icon: <Smartphone size={18} style={{ color: '#38bdf8' }} />, 
+          icon: <Smartphone size={18} style={{ color: 'var(--color-x-purple)' }} />, 
           title: 'Screenshot Cleanup Manager', 
           desc: 'Auto-groups forgotten receipts, memes, and screenshots by month for 1-tap removal.' 
         },
         { 
-          icon: <ShieldCheck size={18} style={{ color: '#38bdf8' }} />, 
+          icon: <ShieldCheck size={18} style={{ color: 'var(--color-x-purple)' }} />, 
           title: '100% On-Device & Private', 
           desc: 'Photos never leave your phone. All scanning runs entirely inside local device RAM.' 
         },
         { 
-          icon: <Trash2 size={18} style={{ color: '#38bdf8' }} />, 
+          icon: <Trash2 size={18} style={{ color: 'var(--color-x-purple)' }} />, 
           title: 'Safe System Deletion', 
           desc: 'Uses Android MediaStore security confirmation to prevent accidental file loss.' 
         }
